@@ -68,7 +68,11 @@ while vivo == 1:
   		print("---------------\nSitema vital operante e ativo")
   	else:
   		print("---------------\nSitema vital inoperante e/ou inativo")
-  elif c == ".on":
+  elif c == "motor.on":
     g.motor = True
+  elif c == "motor.off":
+    g.motor = False
+  elif c == "motor.destroy":
+    vivo = 0
   else:
     print("Comando invalido")

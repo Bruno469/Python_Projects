@@ -14,9 +14,11 @@ print(f'[+] {client_addr} Connect to the serve')
 
 while True:
     command = input('Enter Command:')
-    command = command.encode()
-    client.send(command)
+    client.send(bytes(str(command), 'utf-8'))
+    if command == 'd-':
+        print('End Connection')
+        exit()
     print('[+] Command Send')
-    output = client.recv(1024)
-    output = client.decode()
-    print(f'Output: {output}')
+    #output = client.recv(1024)
+    #output = client.decode(encoding='utf-8')
+    #print(f'Output: {output}')

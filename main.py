@@ -1,3 +1,5 @@
+#DiscordBot
+
 import discord
 
 client = discord.Client()

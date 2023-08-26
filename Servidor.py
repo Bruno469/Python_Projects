@@ -25,4 +25,3 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             output = outpt
             output_error = op.stderr.read()
             conn.sendall(output.encode() + output_error)
-                

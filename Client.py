@@ -1,19 +1,26 @@
 import socket
 
-HOST = '127.0.0.1'
-PORT = 176
+HOST = "192.168.0.111"  # The server's hostname or IP address
+PORT = 176  # The port used by the server
 
-s = socket.socket()
-s.connect((HOST, PORT))
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    while True:
 
-print('[-] Start Client')
-print('[-] Wainting Serve...')
-print(f'[-] Connect to the serve: {HOST}')
-
-while True:
-    data = s.recv(2048)
-    command = data.decode('utf-8')
-    if command == 'd-':
-        print('Connect Off')
-        exit()
-    print(f'Serve say {command}')
+        s.connect((HOST, PORT))
+        connect = s.recv(1024)
+        tests = connect.decode('utf-8')
+        confirm = 'Conectado'
+        if confirm == tests:
+            while True:
+                command = input("Connect>>>")
+                s.sendall(bytes(str(command), 'utf-8'))
+                try:
+                    data = s.recv(2048)
+                    saidapc = data.decode("utf-8")
+                    print(f"Received {saidapc}")
+                except:
+                    print(f"invalid command:{command}")
+                    pass
+                if command == 'd-':
+                    print('Connect Off')
+                    break

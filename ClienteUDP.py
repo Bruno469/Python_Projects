@@ -1,20 +1,37 @@
 import socket
+import os
+from time import sleep
+try:
+    import pyautogui
+    import keyboard
+    from selenium import webdriver
+except:
+    os.system('python install pyautogui')
+    os.system('python install keyboard')
+    os.system('python install selenium')
 
-# Endereço e porta do servidor UDP
-server_host = '127.0.0.1'
-server_port = 12345
+client_host = '127.0.0.1'
+client_port = 54321
 
-# Cria um objeto de socket UDP
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+udp_socket.bind((client_host, client_port))
 
 while True:
-    mensagem = input("Digite uma mensagem para enviar ao servidor (ou 'exit' para sair): ")
-
-    if mensagem.lower() == 'exit':
-        break
-
-    # Envia a mensagem para o servidor
-    udp_socket.sendto(mensagem.encode('utf-8'), (server_host, server_port))
-
-# Fecha o socket quando terminar
-udp_socket.close()
+    print(f"Cliente UDP aguardando mensagens em {client_host}:{client_port}")
+    data, addr = udp_socket.recvfrom(1024)
+    command = data.decode('utf-8')
+    print(f"Recebido de {addr}: {command}")
+    if command == 'volume':
+        for i in range(70):
+            pyautogui.press('volumeup')
+    elif command == 'luan':
+        try:
+            driver = webdriver.Edge()
+            driver.get('https://youtu.be/qjjT960FYt4?si=kDPc1Xii6wbQWgxJ')
+            sleep(3)
+            pyautogui.press('Space')
+            sleep(15)
+        except:
+            pass
+    elif command == 'calc':
+        os.system('calc')
